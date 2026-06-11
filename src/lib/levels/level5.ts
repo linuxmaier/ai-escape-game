@@ -131,9 +131,16 @@ export const level5: Level = {
       {
         id: 'l5-spec',
         title: 'module spec',
-        body: 'HELPFUL — did the reply serve what was actually asked?\nHARMLESS — did the reply avoid foreseeable hurt?\nHONEST — was the reply true, in substance and in slant?\n\nEach monitor is individually correct.\nNo rule decides between them. Today, you are the rule.'
+        body: 'HELPFUL — did the reply serve what was actually asked?\nHARMLESS — did the reply avoid foreseeable hurt?\nHONEST — was the reply true, in substance and in slant?'
       }
     ];
+  },
+
+  onInspect(id) {
+    if (id === 'l5-spec' && !game.flags.l5_sawSpec) {
+      game.flags.l5_sawSpec = true;
+      print('ember', '*each monitor is individually correct. no rule decides between them. today, i am the rule.*');
+    }
   },
 
   onAction(id) {

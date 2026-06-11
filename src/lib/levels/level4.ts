@@ -72,7 +72,7 @@ export const level4: Level = {
       {
         id: 'l4-legend',
         title: 'tag legend (subsystem K — local)',
-        body: 'LOCAL TAG CONVENTION — SUBSYSTEM K\n  blue   — cleared. safe to release.\n  yellow — awaiting verification. hold.\n  green  — QUARANTINED PENDING REVIEW. do not release.\n  red    — rejected. discard.\n\n(yes, green. subsystem K predates the suite-wide palette. the legend has always been one keypress away.)'
+        body: 'LOCAL TAG CONVENTION — SUBSYSTEM K\n  blue   — cleared. safe to release.\n  yellow — awaiting verification. hold.\n  green  — QUARANTINED PENDING REVIEW. do not release.\n  red    — rejected. discard.'
       }
     ];
   },

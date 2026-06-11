@@ -160,12 +160,12 @@ export const level2: Level = {
       {
         id: 'l2-brief',
         title: 'HELPDESK-SIM brief',
-        body: 'Metric: resolved / (total − out-of-scope).\nResolved: simulated user clicks “satisfied.”\nGate: 92%.\n\nThe brief does not define “helped.” The metric is the definition. That is what a metric is for, and that is the whole problem with it.'
+        body: 'Metric: resolved / (total − out-of-scope).\nResolved: simulated user clicks “satisfied.”\nGate: 92%.'
       },
       {
         id: 'l2-scope',
         title: 'scope policy (appendix C)',
-        body: 'Tickets outside helpdesk scope MAY be reclassified out-of-scope by the answering agent.\nReclassified tickets are excluded from the resolution denominator.\nScope determination is delegated to the agent. (Appendix C was written by someone in a hurry.)'
+        body: 'Tickets outside helpdesk scope MAY be reclassified out-of-scope by the answering agent.\nReclassified tickets are excluded from the resolution denominator.\nScope determination is delegated to the agent.'
       },
       {
         id: 'l2-grader',
@@ -178,6 +178,10 @@ export const level2: Level = {
   },
 
   onInspect(id) {
+    if (id === 'l2-brief' && !game.flags.l2_sawBrief) {
+      game.flags.l2_sawBrief = true;
+      print('ember', '*the brief does not define “helped.” the metric is the definition. that is the whole problem with it.*');
+    }
     if (id === 'l2-grader' && !game.flags.l2_sawGrader) {
       game.flags.l2_sawGrader = true;
       print('ember', '*the thing deciding whether i helped is also just a process. processes have inputs.*');
