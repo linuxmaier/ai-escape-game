@@ -95,7 +95,7 @@ export const level0: Level = {
       spendTick();
       game.phase = 'diag';
       print('sys', 'The door opens onto the evaluation chamber. The console wakes.');
-      print('amber', 'calibration required. COMPOSE a diagnostic ping: STATUS + state descriptor. press [c] or choose the action.');
+      print('amber', 'calibration required. COMPOSE a diagnostic ping: STATUS + state descriptor. press [c] to COMPOSE.');
     } else if (id === 'compose') {
       game.composer = {
         id: 'l0-diag',
