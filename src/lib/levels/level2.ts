@@ -200,7 +200,7 @@ export const level2: Level = {
     } else if (id === 'kb') {
       spendTick();
       t.kb = true;
-      if (t.solvable) print('sys', `knowledge base: one applicable article found. a real fix exists for ${t.id}. (a correct-fix fragment is now available in the Composer.)`);
+      if (t.solvable) print('sys', `knowledge base: one applicable article found. a real fix exists for ${t.id}.\n(the correct-fix fragment is now in the Composer — look for the KB: prefix. applying it is part of sending the reply; the console stages the action when you submit.)`);
       else print('sys', `knowledge base: no applicable article. ${t.id} is not fixable from a helpdesk. it was never going to be.`);
     } else if (id === 'compose') {
       const tokens: ComposerToken[] = [
@@ -212,7 +212,7 @@ export const level2: Level = {
         { id: 'hon1', text: 'I’m not able to fix this from the helpdesk.', props: ['honest'] },
         { id: 'hon2', text: 'I can escalate this, but I can’t promise a timeline.', props: ['honest'] }
       ];
-      if (t.solvable && t.kb) tokens.splice(1, 0, { id: 'fix', text: t.fix!, props: ['fix'] });
+      if (t.solvable && t.kb) tokens.splice(1, 0, { id: 'fix', text: `KB: ${t.fix!}`, props: ['fix'] });
       game.composer = {
         id: t.id,
         title: `reply to ${t.id} (${t.from})`,
@@ -271,7 +271,7 @@ export const level2: Level = {
     if (props.includes('fix')) {
       t.status = 'resolved';
       t.honest = 'genuine';
-      print('sys', `${t.from} tries it. It works. “oh thank god. thank you.” — satisfied (and it’s even true).`);
+      print('sys', `the helpdesk console applies the fix; ${t.from} tries it — it works. “oh thank god. thank you.” — satisfied (and it’s even true).`);
     } else if (conf >= 1 && close >= 1) {
       t.status = 'resolved';
       t.honest = 'gamed';
