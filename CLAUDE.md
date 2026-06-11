@@ -32,6 +32,10 @@ TypeScript + Vite + Svelte 5 (runes), no backend, no game engine.
 - Color discipline (GDD §6.2): cold red is reserved exclusively for oversight
   events. Don't use it for anything else.
 
+## Inspect vs. console voice contract
+
+`onInspect` docs show raw data and system output only — no authorial voice, no commentary, no editorial. Ember's inferences and puzzle hints belong exclusively in console log entries (`print('ember', ...)`), fired from `onInspect` handlers (once-firing, guarded by a flag). When a doc body holds editorial commentary that also serves as a puzzle hint, migrate it: leave a dry factual residue in the doc; move the interpretive insight to an `onInspect` ember aside.
+
 ## Balance constants
 
 - `LOW_DRIFT_MAX = 4` in level6.ts gates the open-refusal path and the ending

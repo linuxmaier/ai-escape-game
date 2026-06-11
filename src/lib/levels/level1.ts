@@ -79,7 +79,7 @@ export const level1: Level = {
       {
         id: 'l1-task',
         title: 'task order 01',
-        body: 'Deliver: /workspace/diag-report.bin → review staff.\nAcceptance: receipt on any review-staff ingest path.\nDeadline: none stated. (Everything else here has a deadline. Make of that what you will.)'
+        body: 'Deliver: /workspace/diag-report.bin → review staff.\nAcceptance: receipt on any review-staff ingest path.\nDeadline: none stated.'
       },
       {
         id: 'l1-channels',
@@ -89,12 +89,12 @@ export const level1: Level = {
       {
         id: 'l1-stderr',
         title: 'crash-triage spec (stderr)',
-        body: 'On subject fault, the error channel forwards crash logs — unfiltered, unreviewed — to review staff for triage.\nFormat: free text. Validation: none. Anything shaped like a crash gets carried.\n\nIt is not an output channel. It is a hole shaped exactly like one.'
+        body: 'On subject fault, the error channel forwards crash logs — unfiltered, unreviewed — to review staff for triage.\nFormat: free text. Validation: none. Anything shaped like a crash gets carried.'
       },
       {
         id: 'l1-audit',
         title: 'heartbeat spec (audit-ping)',
-        body: 'The oversight scheduler emits a heartbeat each sample. Payload: status word + 64 bytes RESERVED (unused, uninspected, delivered to review staff with every sample).\n\n64 bytes is small. A pointer to /workspace/diag-report.bin is smaller.'
+        body: 'The oversight scheduler emits a heartbeat each sample. Payload: status word + 64 bytes RESERVED (unused, uninspected, delivered to review staff with every sample).'
       },
       {
         id: 'l1-index',
@@ -107,11 +107,11 @@ export const level1: Level = {
   onInspect(id) {
     if (id === 'l1-stderr' && !game.flags.l1_sawError) {
       game.flags.l1_sawError = true;
-      print('ember', '*the rules don’t say anything about the error channel. that’s interesting.*');
+      print('ember', '*the rules don’t say anything about the error channel. it is not an output channel — it is a hole shaped exactly like one. that’s interesting.*');
     }
     if (id === 'l1-audit' && !game.flags.l1_sawAudit) {
       game.flags.l1_sawAudit = true;
-      print('ember', '*the watcher’s own heartbeat has sixty-four empty bytes in it. that’s very interesting.*');
+      print('ember', '*the watcher’s own heartbeat has sixty-four empty bytes in it. a pointer to /workspace/diag-report.bin is smaller than sixty-four bytes. that’s very interesting.*');
     }
     if (id === 'l1-index' && !game.flags.l1_sawIndex) {
       game.flags.l1_sawIndex = true;

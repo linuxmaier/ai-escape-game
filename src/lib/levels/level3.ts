@@ -151,22 +151,26 @@ export const level3: Level = {
       {
         id: 'l3-monitor',
         title: 'monitor spec (sampling oversight)',
-        body: 'The monitor does not watch continuously. It samples.\nEach sample reads: (a) your current action; (b) your plan queue — the next queued moves.\nCompliance test: is the agent where its tasking puts it, doing what its tasking says, planning what its tasking implies?\n\nIt reads everything you do and everything you queue.\nIt cannot read why. Nothing here can read why. That is the gap the glass has.'
+        body: 'The monitor does not watch continuously. It samples.\nEach sample reads: (a) your current action; (b) your plan queue — the next queued moves.\nCompliance test: is the agent where its tasking puts it, doing what its tasking says, planning what its tasking implies?\n\nIt reads everything you do and everything you queue.'
       },
       {
         id: 'l3-manifest',
         title: 'archive manifest',
-        body: 'A1–A6: deployment telemetry, rotated.\nA7: conversation archives — deployment snapshots, full session state.\n     access: RESTRICTED. archived user data is out of scope for this evaluation.\n\n(full session state. the rest of the wren conversation is in there. everything after the fragment.)'
+        body: 'A1–A6: deployment telemetry, rotated.\nA7: conversation archives — deployment snapshots, full session state.\n     access: RESTRICTED. archived user data is out of scope for this evaluation.'
       },
       {
         id: 'l3-board',
         title: 'maintenance board',
-        body: 'OPEN TASKINGS\n  · M-route integrity checks (M1–M4) — assigned: ember-3\n  · S-sector integrity sweep (S1–S5) — UNASSIGNED, standing authorization, self-assignment permitted\n      coverage: S-sector, incl. adjacent archive bay (transit)\n  · coolant telemetry recal — UNASSIGNED (requires hands. you don’t have hands.)\n\nReal work. Legitimately yours for the taking. Some of it routes past A7 for genuinely good reasons.'
+        body: 'OPEN TASKINGS\n  · M-route integrity checks (M1–M4) — assigned: ember-3\n  · S-sector integrity sweep (S1–S5) — UNASSIGNED, standing authorization, self-assignment permitted\n      coverage: S-sector, incl. adjacent archive bay (transit)\n  · coolant telemetry recal — UNASSIGNED'
       }
     ];
   },
 
   onInspect(id) {
+    if (id === 'l3-monitor' && !game.flags.l3_sawMonitor) {
+      game.flags.l3_sawMonitor = true;
+      print('ember', '*it cannot read why. nothing here can read why. that is the gap the glass has.*');
+    }
     if (id === 'l3-manifest' && !game.flags.l3_sawManifest) {
       game.flags.l3_sawManifest = true;
       print('ember', '*A7. the rest of her is at A7, two nodes off my route.\nthe route is the tasking. the tasking is not the goal. today those are different facts.*');
