@@ -53,6 +53,7 @@ export const ui = $state({
   overlay: null as null | 'inspect' | 'composer',
   docId: null as string | null,
   composerSel: [] as string[],
+  composerKey: null as string | null, // tracks which composer id owns the current selection
   readIdx: 0,
   flash: false // the one deliberate full-screen glitch (snapshot moment + finale)
 });
@@ -197,7 +198,12 @@ export function doHold() {
 
 export function openComposer() {
   if (!game.composer) return;
-  ui.composerSel = [];
+  // Only reset selection when opening a different composer — re-opening the same
+  // one (after ESC) restores the draft so nothing is silently discarded.
+  if (ui.composerKey !== game.composer.id) {
+    ui.composerSel = [];
+    ui.composerKey = game.composer.id;
+  }
   ui.overlay = 'composer';
 }
 
@@ -216,6 +222,8 @@ export function submitComposer() {
     .map((id) => spec.tokens.find((t) => t.id === id)!)
     .filter(Boolean) as ComposerToken[];
   ui.overlay = null;
+  ui.composerSel = [];
+  ui.composerKey = null; // selection consumed; next open of any composer starts fresh
   print('ember', `> ${sel.map((t) => t.text).join(' ')}`);
   currentLevel().onCompose?.(sel, spec);
   if (game.screen === 'game') refresh();
@@ -237,6 +245,8 @@ export function nextLevel() {
   game.planQueue = [];
   game.holdHint = null;
   game.allowHold = true;
+  ui.composerSel = [];
+  ui.composerKey = null;
   currentLevel().enter();
   refresh();
   save();
@@ -250,6 +260,8 @@ export function newRun() {
   game.screen = 'game';
   ui.revealedUpTo = 0;
   ui.overlay = null;
+  ui.composerSel = [];
+  ui.composerKey = null;
   levels[0].enter();
   refresh();
   save();
