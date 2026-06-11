@@ -336,7 +336,7 @@
               <button class="submit" disabled={ui.composerSel.length < game.composer.min} onclick={submitComposer}>
                 [enter] submit ({ui.composerSel.length}/{game.composer.min}–{game.composer.max})
               </button>
-              <button class="submit" onclick={() => (ui.overlay = null)}>[esc] step back</button>
+              <button class="submit" onclick={() => (ui.overlay = null)}>[esc] close</button>
             </div>
           </div>
         </div>

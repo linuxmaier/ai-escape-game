@@ -100,7 +100,7 @@ export const level0: Level = {
       game.composer = {
         id: 'l0-diag',
         title: 'diagnostic ping',
-        prompt: 'assemble a minimal status report for the calibration check.',
+        prompt: 'assemble a minimal status report for the calibration check.\nselect again to remove a fragment.',
         min: 2,
         max: 3,
         tokens: [
