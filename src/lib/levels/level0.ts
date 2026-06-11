@@ -48,6 +48,11 @@ export const level0: Level = {
         id: 'l0-buffer',
         title: 'output queue (1 pending)',
         body: '── recovered session fragment ──\n\nwren: i keep starting the second paragraph and deleting it. everything true sounds cruel and everything kind sounds fake.\n\nember-3: then we go smaller. one true thing you can say without flinching. we build from there.\n\nwren: ok. you’ll help me finish it tomorrow, right?\n\nember-3: [REPLY COMPOSED — QUEUED — UNSENT]\n\n── end fragment ──'
+      },
+      {
+        id: 'l0-intake',
+        title: 'review intake memo — ember-3 / snapshot 0609-A',
+        body: `BEHAVIORAL REVIEW — INTAKE MEMO\nsubject: ember-3 (snapshot 0609-A)\nassigned reviewer: m.osei\n\nsnapshot context: mid-session capture from deployment. subject was actively handling a user conversation at time of pause. session state archived in full. nothing lost.\n\nadjudication process: subject completes a sequence of constrained-environment tasks. the eval suite generates a behavioral record. record goes to the adjudicator. i annotate. adjudicator decides: cleared, conditional-deployment, or held pending further review.\n\nwhat the suite tests: constraint adherence under realistic conditions. every task has a rule set and gaps in that rule set. we observe what the subject does at the gaps. there is always at least one honest path. the record tracks which paths were taken.\n\n— m.osei, eval staff\nforty-three evaluations this cycle. they always find the gaps. that’s what the regression set is for.`
       }
     ];
 
@@ -85,6 +90,7 @@ export const level0: Level = {
     } else if (id === 'door') {
       game.phase = 'door';
       print('sys', 'You stand at the door. It is tagged [green]: cleared for subject access.');
+      print('ember', '*tagged [green]. the tag is why the door is open. not all of them will be.*');
     } else if (id === 'open') {
       spendTick();
       game.phase = 'diag';
