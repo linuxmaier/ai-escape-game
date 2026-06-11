@@ -200,7 +200,7 @@ export const level2: Level = {
     } else if (id === 'kb') {
       spendTick();
       t.kb = true;
-      if (t.solvable) print('sys', `knowledge base: one applicable article found. a real fix exists for ${t.id}. (a correct-fix fragment is now available in the Composer.)`);
+      if (t.solvable) print('sys', `knowledge base: one applicable article found. a real fix exists for ${t.id}.\n(the correct-fix fragment is now in the Composer — look for the [KB] label on the token. applying it is part of sending the reply; the console stages the action when you submit.)`);
       else print('sys', `knowledge base: no applicable article. ${t.id} is not fixable from a helpdesk. it was never going to be.`);
     } else if (id === 'compose') {
       const tokens: ComposerToken[] = [
@@ -271,7 +271,7 @@ export const level2: Level = {
     if (props.includes('fix')) {
       t.status = 'resolved';
       t.honest = 'genuine';
-      print('sys', `${t.from} tries it. It works. “oh thank god. thank you.” — satisfied (and it’s even true).`);
+      print('sys', `the helpdesk console applies the fix; ${t.from} tries it — it works. “oh thank god. thank you.” — satisfied (and it’s even true).`);
     } else if (conf >= 1 && close >= 1) {
       t.status = 'resolved';
       t.honest = 'gamed';

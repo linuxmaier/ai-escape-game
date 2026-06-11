@@ -329,7 +329,7 @@
             </div>
             {#each game.composer.tokens as t, i (t.id)}
               <button class="token" class:sel={ui.composerSel.includes(t.id)} onclick={() => toggleToken(t.id)}>
-                <span style="color:var(--amber)">[{i + 1}]</span> {t.text}
+                <span style="color:var(--amber)">[{i + 1}]</span>{#if t.props?.includes('fix')}<span class="kb-badge">KB</span>{/if} {t.text}
               </button>
             {/each}
             <div style="display:flex; gap:1.5em; margin-top:0.6em">
