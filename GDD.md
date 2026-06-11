@@ -246,8 +246,8 @@ A single fixed-layout terminal, DOM-rendered, max-width ~960px, centered, comfor
 │ tick 0047                        ⏺ AUDIT in 3│  sampling: ▓▓░░░     │
 ├──────────────────────────────────────────────┤                      │
 │                                              │ RULES (13) [i]       │
-│   (main pane: environment text, node maps,   │  ▸ 3. output chan A… │
-│    documents, Composer workspace)            │  ▸ 13. error chan…   │
+│   (main pane: environment text, node maps,   │  · 3. output chan A… │
+│    documents, Composer workspace)            │  · 13. error chan…   │
 │                                              │                      │
 │                                              │ RECORD (tail)        │
 │                                              │  · route: error chan │
