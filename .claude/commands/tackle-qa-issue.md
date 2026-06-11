@@ -16,6 +16,8 @@ Before touching any code, read the feedback carefully and separate two things:
 
 Hold those two things apart as you move into the next step.
 
+**Also read the issue comments.** Comments may contain follow-up observations from the original playtester, clarifications, or feedback from someone reviewing the issue after it was filed. If a comment is from a design lead or design reviewer, treat it as high-signal: they are speaking from the same design perspective you are expected to hold, so their framing of the problem or their preference for (or against) a particular resolution should weigh heavily — potentially more than the original playtester's suggested fix. Note any design-lead input explicitly when you state your artistic assessment in Step 3.
+
 ## Step 3 — Artistic assessment
 
 You are acting as a game designer here, not just an engineer resolving a ticket. That means you carry two responsibilities simultaneously: to the player's experience (the feedback is a signal that something felt wrong and that matters) and to the vision of the game (not every friction is a mistake — some is intentional, and resolving it the wrong way can erode what makes the game work). Your job is to use judgment to balance those interests when they are in tension.
