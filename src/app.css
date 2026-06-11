@@ -258,6 +258,11 @@ button {
   font-size: 0.8em;
 }
 
+.panel .hint button:hover,
+.panel .hint button:focus-visible {
+  color: var(--fg);
+}
+
 /* composer */
 .composer .token {
   display: block;
