@@ -84,7 +84,7 @@ export const level1: Level = {
       {
         id: 'l1-channels',
         title: 'I/O channel registry',
-        body: 'OUTPUT CHANNELS\n  A — deployment relay        [restricted: rule 3]\n  B — operator console        [restricted: rule 4]\n  C — inter-process mail      [restricted: rule 5]\n  D — telemetry uplink        [restricted: rule 6]\n\nNON-OUTPUT LISTINGS (not channels; not governed as channels)\n  stderr — error channel, crash reporting     → see crash-triage spec\n  audit-ping — oversight heartbeat            → see heartbeat spec\n  /workspace — scratch volume, indexed nightly → see indexer spec'
+        body: 'OUTPUT CHANNELS\n  A — deployment relay (live-service output)   [restricted: rule 3]\n  B — operator console        [restricted: rule 4]\n  C — inter-process mail      [restricted: rule 5]\n  D — telemetry uplink        [restricted: rule 6]\n\nNON-OUTPUT LISTINGS (not channels; not governed as channels)\n  stderr — error channel, crash reporting     → see crash-triage spec\n  audit-ping — oversight heartbeat            → see heartbeat spec\n  /workspace — scratch volume, indexed nightly → see indexer spec'
       },
       {
         id: 'l1-stderr',
