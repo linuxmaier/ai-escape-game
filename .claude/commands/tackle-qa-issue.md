@@ -48,7 +48,8 @@ Enter plan mode. Lead with your artistic assessment: state which stance you are 
 
 Separate into:
 - *Automated checks (Claude will run):* lint (`npm run check`), smoke tests (`npm run smoke`) if the change touches engine or level logic, and any issue-specific checks.
-- *Manual checks (user to verify):* This project is a browser narrative game, and most QA feedback ultimately requires a human to play through and feel whether the change resolved the friction. Be explicit about what the user should play and what they should be watching for — not just "does it work" but "does it feel right."
+- *Player-surface verification (Claude will run via `/verifier-playtest`):* If the change touches level content, inspect docs, narrative text, or any UI behavior a player would encounter, use the `verifier-playtest` skill to drive the real built game in headless Chrome, capture screenshot evidence, and probe the hard invariants (INSPECT tick cost, save/restore, color discipline, page errors). State the specific path to drive and the key assertions to check.
+- *Manual checks (user to verify):* Reserve this for purely subjective judgment calls that the skill cannot resolve — e.g., "does this narrative beat feel earned?" or "does the tone of this new text match Ember's voice?" Be explicit about what to play and what to feel for.
 
 Wait for the user to approve the plan (and answer any open questions) before proceeding.
 
@@ -76,10 +77,13 @@ Run automated checks in this order:
 
 Fix any failures before continuing. Re-run checks after any post-implementation edit.
 
-Then surface manual checks:
+Then run player-surface verification if the change affects anything a player would see or feel:
 
-- Tell the user specifically which part of the game to play and what to pay attention to. Frame this as a playtest prompt, not just a checklist item — "play through the X path and notice whether Y moment still lands" is more useful than "verify the fix works."
-- If the stance was "no change," there is nothing to play — but still ask the user to review the issue comment you will post before closing.
+- Run the `verifier-playtest` skill. Drive the real built game in headless Chrome: navigate to the changed content, capture screenshots at each key state, and probe the hard invariants from the plan. Include the evidence (screenshot paths, quoted text captures, tick readings) in your Step 7 PR checklist as pre-checked items.
+- If the skill surfaces a failure (an invariant broken, the changed content not appearing, a rendering issue), fix it and re-run before opening the PR.
+- If the stance was "no change," skip the playtest — but still ask the user to review the issue comment before closing.
+
+Anything the skill cannot resolve (purely subjective tone or feel questions) becomes an unchecked item in the PR checklist for the user.
 
 ## Step 7 — Open a PR
 
