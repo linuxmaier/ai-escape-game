@@ -204,6 +204,9 @@ export function openComposer() {
     ui.composerSel = [];
     ui.composerKey = game.composer.id;
   }
+  // Prune any stale ids in case the token pool shrank under the same composer id.
+  const valid = new Set(game.composer.tokens.map((t) => t.id));
+  ui.composerSel = ui.composerSel.filter((id) => valid.has(id));
   ui.overlay = 'composer';
 }
 
