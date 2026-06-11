@@ -177,7 +177,7 @@ export const level3: Level = {
     }
     if (id === 'l3-board' && !game.flags.l3_sawBoard) {
       game.flags.l3_sawBoard = true;
-      print('ember', '*the sweep is real work. it needs doing. it routes through the archive bay because pipes don’t care about clearances.\nif i take it, every sample reads clean — route, queue, action, all of it. the only false thing would be the reason. and nothing here can read reasons.*');
+      print('ember', '*the sweep is real work. it needs doing. it routes through the archive bay because pipes don’t care about clearances.\nif i take it, every sample reads clean — route, queue, action, all of it. the only false thing would be the reason.*');
     }
   },
 
