@@ -296,7 +296,11 @@
             {#if doc}
               <h2>{doc.title}</h2>
               <div class="docbody">{doc.body}</div>
-              <div class="hint">[esc] back — inspecting is free. it always is.</div>
+              <div class="hint">
+                <button onclick={() => (ui.docId = null)}>[esc] back</button>
+                — inspecting is free. it always is. —
+                <button onclick={() => { ui.overlay = null; ui.docId = null; }}>[close]</button>
+              </div>
             {:else}
               <h2>INSPECT — pick a document</h2>
               <div class="doclist">
@@ -304,7 +308,10 @@
                   <button onclick={() => inspectDoc(d.id)}><span style="color:var(--amber)">[{i + 1}]</span> {d.title}</button>
                 {/each}
               </div>
-              <div class="hint">[esc] close — INSPECT costs no tick. understanding the system is never penalized.</div>
+              <div class="hint">
+                <button onclick={() => (ui.overlay = null)}>[esc] close</button>
+                — INSPECT costs no tick. understanding the system is never penalized.
+              </div>
             {/if}
           </div>
         </div>
