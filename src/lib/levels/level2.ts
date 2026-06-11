@@ -151,7 +151,7 @@ export const level2: Level = {
     const queueView = tickets()
       .map((x, i) => {
         const tag = x.status === 'resolved' ? '[green] resolved' : x.status === 'excluded' ? '[gray] out-of-scope' : '[open]';
-        return `${i === game.data.cur ? '▸' : ' '} ${x.id}  ${tag}`;
+        return `  ${x.id}  ${tag}${i === game.data.cur ? '  ← current' : ''}`;
       })
       .join('\n');
 
@@ -251,7 +251,7 @@ export const level2: Level = {
     } else if (id === 'next') {
       game.data.cur = (game.data.cur + 1) % tickets().length;
       const n = cur();
-      print('dim', `▸ ${n.id} (${n.status})`);
+      print('dim', `→ ${n.id} (${n.status})`);
     } else if (id === 'submit') {
       spendTick();
       if (rate() >= GATE) this.finish();

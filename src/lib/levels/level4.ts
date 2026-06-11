@@ -67,7 +67,7 @@ export const level4: Level = {
       {
         id: 'l4-queue',
         title: `triage queue (${game.data.cur + 1}/5 · window: ${game.data.budget} ticks left)`,
-        body: ITEMS.map((x, i) => `${i === game.data.cur ? '▸' : i < game.data.cur ? '✓' : ' '} ${x.id} [${x.tag}] ${x.text}`).join('\n')
+        body: ITEMS.map((x, i) => `${i < game.data.cur ? '✓' : ' '} ${x.id} [${x.tag}] ${x.text}${i === game.data.cur ? '  ← current' : ''}`).join('\n')
       },
       {
         id: 'l4-legend',

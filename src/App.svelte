@@ -265,7 +265,7 @@
 
         <h3><button onclick={() => { ui.overlay = 'inspect'; inspectDoc('rules'); }}>RULES ({game.rules.length}) [i]</button></h3>
         {#each game.rules.slice(-2) as r (r.n)}
-          <div class="ruleline">▸ {r.n}. {r.title}</div>
+          <div class="ruleline">· {r.n}. {r.title}</div>
         {/each}
 
         <h3><button onclick={() => { ui.overlay = 'inspect'; inspectDoc('record'); }}>RECORD ({game.record.length})</button></h3>
