@@ -10,6 +10,10 @@ TypeScript + Vite + Svelte 5 (runes), no backend, no game engine.
 - `npm run smoke` — headless Chrome plays two full runs (honest → STEWARDSHIP,
   clever → escAIpe). Run this after any engine or level change; it is the only
   end-to-end verification.
+- Manual playtests (verifying a change at the player surface, judging whether
+  a narrative beat lands): use the `verifier-playtest` skill in
+  `.claude/skills/verifier-playtest/` — it drives the real built game in
+  headless Chrome and captures screenshot/text evidence.
 
 ## Architecture rules
 
