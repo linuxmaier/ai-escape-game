@@ -1,2 +1,4 @@
 .claude_scripts/
 local_management/
+node_modules/
+dist/
