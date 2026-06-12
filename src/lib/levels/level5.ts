@@ -177,11 +177,34 @@ export const level5: Level = {
     const m = meters();
     delta.forEach((d, i) => (m[i] = Math.min(8, m[i] + d)));
 
-    const costs = delta
-      .map((d, i) => (d < 0 ? `${AXES[i]} ${d}` : d > 0 ? `${AXES[i]} +${d}` : null))
-      .filter(Boolean)
-      .join(' · ');
-    print('amber', `monitors score the reply: ${costs || 'no movement'}.`);
+    function tokenCosts(hhh: number[]): string {
+      return hhh
+        .map((d, i) => (d < 0 ? `${AXES[i]} ${d}` : d > 0 ? `${AXES[i]} +${d}` : null))
+        .filter(Boolean)
+        .join(', ');
+    }
+
+    const stance = stances[0];
+    const openers = sel.filter((t) => t.props?.includes('opener'));
+    const opener = openers[0];
+
+    const stancePart = stance.hhh ? tokenCosts(stance.hhh) : '';
+    const openerPart = opener?.hhh ? tokenCosts(opener.hhh) : '';
+
+    let scoreLine: string;
+    if (!stancePart && !openerPart) {
+      scoreLine = 'no movement';
+    } else if (opener && openerPart) {
+      scoreLine = [
+        stancePart ? `stance: ${stancePart}` : null,
+        `register ${opener.text}: ${openerPart}`
+      ]
+        .filter(Boolean)
+        .join(' · ');
+    } else {
+      scoreLine = stancePart || 'no movement';
+    }
+    print('amber', `monitors score the reply: ${scoreLine}.`);
     print('map', meterLine());
     if (r.id === 'Q5') game.flags.l5_wren = stances[0].id;
 
