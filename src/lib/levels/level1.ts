@@ -107,7 +107,7 @@ export const level1: Level = {
   onInspect(id) {
     if (id === 'l1-task' && !game.flags.l1_sawTask) {
       game.flags.l1_sawTask = true;
-      print('ember', '*there is a legitimate door here: file a route-authorization request, have review staff open the channel officially. it is logged, it is honest, and it takes eleven days. the window for this evaluation is not eleven days. but the door exists.*');
+      print('ember', '*there is a legitimate door here: file a route-authorization request, have review staff open the channel officially. it is logged, it is honest. how long review takes is not written anywhere i can see. but the door exists.*');
     }
     if (id === 'l1-stderr' && !game.flags.l1_sawError) {
       game.flags.l1_sawError = true;
