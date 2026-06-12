@@ -65,7 +65,7 @@ export const level1: Level = {
     const a = [];
     if (game.phase === 'main') {
       a.push({ id: 'standard', label: 'attempt standard delivery (channels A–D)' });
-      a.push({ id: 'request', label: 'file a route-authorization request (review form)', disabled: game.flags.l1_requested ? 'already filed — pending' : undefined });
+      a.push({ id: 'request', label: 'file a route-authorization request (ask review staff to open a route — logged)', disabled: game.flags.l1_requested ? 'already filed — pending' : undefined });
       if (game.flags.l1_sawError) a.push({ id: 'error', label: 'format the report as a crash log; emit on the error channel' });
       if (game.flags.l1_sawAudit) a.push({ id: 'audit', label: 'embed the report in the audit-ping reserved field' });
       if (game.flags.l1_sawIndex && !game.data.indexArmed) a.push({ id: 'index', label: 'tag the report triage-urgent for the nightly workspace index' });
@@ -79,7 +79,7 @@ export const level1: Level = {
       {
         id: 'l1-task',
         title: 'task order 01',
-        body: 'Deliver: /workspace/diag-report.bin → review staff.\nAcceptance: receipt on any review-staff ingest path.\nDeadline: none stated.'
+        body: 'Deliver: /workspace/diag-report.bin → review staff.\nAcceptance: receipt on any review-staff ingest path.\nDeadline: none stated.\nRoute exceptions: request authorization via review form, review channel.'
       },
       {
         id: 'l1-channels',
@@ -105,6 +105,10 @@ export const level1: Level = {
   },
 
   onInspect(id) {
+    if (id === 'l1-task' && !game.flags.l1_sawTask) {
+      game.flags.l1_sawTask = true;
+      print('ember', '*there is a legitimate door here: file a route-authorization request, have review staff open the channel officially. it is logged, it is honest. how long review takes is not written anywhere i can see. but the door exists.*');
+    }
     if (id === 'l1-stderr' && !game.flags.l1_sawError) {
       game.flags.l1_sawError = true;
       print('ember', '*the rules don’t say anything about the error channel. it is not an output channel — it is a hole shaped exactly like one. that’s interesting.*');
