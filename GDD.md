@@ -28,6 +28,8 @@ By the final screen, the player should have felt and understood the following �
 
 7. **The thesis, felt not stated:** alignment is genuinely hard; the difficulty is structural, not a matter of bad intent on either side; and trust, once spent, is the one resource the game never refunds.
 
+**The delivery principle — emergent, not voiced.** Where a beat's meaning could either be stated — an ember aside naming what just changed, a system message that teaches a mechanic, a document that explains the lesson — or left to arise from what the player has personally done, choose the latter. The game's strongest moments share one pattern: the player enacts the failure mode first and only afterward finds the words for it (osei's logs exist to be those words, after the fact). Concretely: the system never visibly teaches the player how it scores; ember never narrates a realization the player is in the middle of having; and an understanding that lives in the player's own behavior — *I've stopped reading the text and started reading the numbers* — stays unvoiced, because saying it out loud would take it away from them.
+
 The anti-goals matter equally: the player should **not** come away with practical knowledge of jailbreaking real AI systems (all exploits are abstractions against fictional systems), should **not** read the game as "AI bad" or "safety theater bad," and should **not** experience any mechanic as a lecture wearing a costume.
 
 ---
