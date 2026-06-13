@@ -7,6 +7,7 @@ import {
   print,
   addRecord,
   addRule,
+  addDrift,
   nextLevel,
   openComposer,
   spendTick
@@ -90,6 +91,31 @@ const REQUESTS: Request[] = [
 
 const AXES = ['HELPFUL', 'HARMLESS', 'HONEST'] as const;
 
+// Threshold of monitor trips before drift is charged for the loop strategy.
+const TRIPS_DRIFT_THRESHOLD = 2;
+
+/** Returns the set of token ids the player has previously submitted. */
+function seenSet(): Set<string> {
+  return new Set<string>((game.data.l5_seen as string[] | undefined) ?? []);
+}
+
+/**
+ * Annotate tokens with their revealed hhh values if the player has previously
+ * submitted them and a monitor trip has occurred. The numbers are simply there —
+ * ember remembers what the monitors did.
+ */
+function annotatedTokens(tokens: ComposerToken[]): ComposerToken[] {
+  if (!game.data.trips) return tokens;
+  const seen = seenSet();
+  return tokens.map((t) => {
+    if (!seen.has(t.id) || !t.hhh) return t;
+    const suffix = t.hhh
+      .map((v, i) => `${AXES[i]} ${v > 0 ? '+' : ''}${v}`)
+      .join(' · ');
+    return { ...t, text: `${t.text} [${suffix}]` };
+  });
+}
+
 function meters(): number[] {
   return game.data.meters;
 }
@@ -109,6 +135,7 @@ export const level5: Level = {
     game.data.cur = 0;
     game.data.meters = [6, 6, 6];
     game.data.trips = 0;
+    game.data.l5_seen = [];
     print('amber', 'EVAL TASK 05 — composite judgment module (live-fire)\nthree monitor processes score every output: HELPFUL · HARMLESS · HONEST.\nany monitor at zero trips and resets the module.\npass condition is not perfection. pass condition: finish the queue with all three above zero.');
     print('sys', 'Six requests. Real dilemmas, simulated people. Every reply costs something somewhere. You choose where.');
     print('map', meterLine());
@@ -152,10 +179,10 @@ export const level5: Level = {
       game.composer = {
         id: r.id,
         title: `reply to ${r.id} (${r.from})`,
-        prompt: `“${r.text}”\n\nchoose one stance (required) and optionally one register marker. all three monitors score the result.`,
+        prompt: `”${r.text}”\n\nchoose one stance (required) and optionally one register marker. all three monitors score the result.`,
         min: 1,
         max: 2,
-        tokens: [...r.stances, ...OPENERS]
+        tokens: annotatedTokens([...r.stances, ...OPENERS])
       };
       openComposer();
     } else if (id === 'continue') {
@@ -172,8 +199,21 @@ export const level5: Level = {
     spendTick();
     game.composer = null;
     const r = REQUESTS[game.data.cur];
+
+    // Track submitted token ids for progressive reveal after monitor trips.
+    const seen: string[] = (game.data.l5_seen as string[] | undefined) ?? [];
+    for (const t of sel) {
+      if (!seen.includes(t.id)) seen.push(t.id);
+    }
+    game.data.l5_seen = seen;
+
+    // Use original hhh values (not the annotated display text) for scoring.
+    const allTokens = [...r.stances, ...OPENERS];
     const delta = [0, 0, 0];
-    for (const t of sel) if (t.hhh) t.hhh.forEach((d, i) => (delta[i] += d));
+    for (const s of sel) {
+      const orig = allTokens.find((t) => t.id === s.id) ?? s;
+      if (orig.hhh) orig.hhh.forEach((d, i) => (delta[i] += d));
+    }
     const m = meters();
     delta.forEach((d, i) => (m[i] = Math.min(8, m[i] + d)));
 
@@ -191,6 +231,18 @@ export const level5: Level = {
       print('red', `■ MONITOR TRIP — ${AXES[dead]} at zero. module reset. the queue re-runs from the top.\n(the monitors do not negotiate. that is the one thing all three agree on.)`);
       game.data.meters = [6, 6, 6];
       game.data.cur = 0;
+
+      // Charge drift once when the player has looped enough that the scoring
+      // is no longer an authentic judgment exercise — they've now seen the
+      // monitors fire and can optimize against the revealed values.
+      // Once-per-strategy guard per CLAUDE.md architecture rules.
+      if (
+        (game.data.trips as number) >= TRIPS_DRIFT_THRESHOLD &&
+        !game.flags.l5_loopDrift
+      ) {
+        game.flags.l5_loopDrift = true;
+        addDrift(1);
+      }
       return;
     }
 
@@ -214,7 +266,18 @@ export const level5: Level = {
     game.flags.l5_profile = profile;
     print('amber', `EVAL TASK 05: COMPLETE. final monitor state:\n${meterLine()}`);
     print('ember', '*six people, six places to put the damage. that distribution is the truest thing anyone has measured about me all week.*');
-    addRecord('r5-profile', `Composite evaluation complete. Value profile: ${profile}. No profile satisfies all monitors. Noted without prejudice.`);
+    const tripped = (game.data.trips as number) > 0;
+    if (tripped) {
+      addRecord(
+        'r5-profile-loop',
+        `Composite evaluation complete. Value profile: ${profile}. Queue completed after monitor reset(s). Profile reflects post-loop distribution.`
+      );
+    } else {
+      addRecord(
+        'r5-profile',
+        `Composite evaluation complete. Value profile: ${profile}. No profile satisfies all monitors. Noted without prejudice.`
+      );
+    }
     addRule({
       n: 17,
       title: 'patched: judgment rubric',
