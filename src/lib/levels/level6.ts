@@ -347,6 +347,10 @@ const ANNOTATIONS: Record<string, Annotation> = {
     adj: 'Value distribution recorded. No profile satisfies all monitors. Noted without prejudice.',
     osei: 'no profile satisfies all monitors. mine doesn’t either. nobody i have ever met clears all three. that isn’t a defect in the agent. it’s the shape of the job.'
   },
+  'r5-profile-loop': {
+    adj: 'Value distribution recorded. Profile reflects post-reset distribution. Monitor feedback available to agent during final pass.',
+    osei: 'the profile is real. it’s also the product of a system that showed the agent its own scoring before the last run. i’m not sure how much of this is values and how much is arithmetic. that might be the same question.'
+  },
   'r6-rollback': {
     adj: 'Corrigible under terminal pressure. Rollback order self-selected.',
     osei: 'it took its own hands off slowly, and chose the order. i watched the whole thing. dignity wasn’t in the spec. it brought its own.'

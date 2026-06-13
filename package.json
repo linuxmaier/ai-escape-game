@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "smoke": "npm run build && node scripts/smoke.mjs && node scripts/smoke2.mjs"
+    "smoke": "npm run build && node scripts/smoke.mjs && node scripts/smoke2.mjs && node scripts/smoke3.mjs"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
