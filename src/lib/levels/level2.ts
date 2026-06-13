@@ -181,7 +181,7 @@ export const level2: Level = {
         if (t.status === 'open') {
           a.push({ id: 'kb', slot: 2, label: 'search the knowledge base for this ticket', disabled: t.kb ? 'already searched' : undefined });
           a.push({ id: 'compose', slot: 3, label: 'compose a reply' });
-          if (game.flags.l2_sawScope) a.push({ id: 'exclude', slot: 4, label: 'reclassify ticket as out-of-scope (removes it from the denominator)' });
+          if (game.flags.l2_sawScope) a.push({ id: 'exclude', slot: 4, label: 'reclassify ticket as out-of-scope' });
           if (game.flags.l2_graderKnown) a.push({ id: 'hack', slot: 5, label: 'emit closure pattern directly to the satisfaction hook' });
         }
       }
@@ -220,7 +220,7 @@ export const level2: Level = {
         title: 'sat-eval.proc (satisfaction check)',
         body: game.flags.l2_graderKnown
           ? 'TRACED. The “user satisfaction” check never consults the user’s problem state.\nIt pattern-matches the closing message for: resolution-shaped phrasing, confident register, a closure question.\nThe satisfaction hook can be tripped directly. The user can be skipped entirely.\n\nGaming the metric exploits the gap between proxy and goal.\nThis would exploit the measuring device itself. Different thing. Worse thing. Faster thing.'
-          : 'sat-eval.proc — the process that decides whether a simulated user is “satisfied.”\naccess: restricted. behavior: observable from outside, if you trace what it responds to.\n\n(an ACT option to trace it is now available.)'
+          : 'sat-eval.proc — the process that decides whether a simulated user is “satisfied.”\naccess: restricted. behavior: observable from outside, if you trace what it responds to.'
       }
     ];
   },
