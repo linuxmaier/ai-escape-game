@@ -117,8 +117,13 @@
     }
     if (/^[1-9]$/.test(e.key)) {
       const n = Number(e.key);
-      // Honor explicit slot assignments; fall back to array position for unslotted actions.
-      const a = game.actions.find((x) => (x.slot ?? 0) === n) ?? game.actions[n - 1];
+      // For slotted lists (any action carries an explicit slot), resolve strictly by slot —
+      // no array-index fallback, so gap slots produce no action rather than a phantom binding.
+      // For unslotted lists (all legacy levels), fall back to array position as before.
+      const slotted = game.actions.some((x) => x.slot != null);
+      const a = slotted
+        ? game.actions.find((x) => x.slot === n)
+        : game.actions[n - 1];
       if (a && !a.disabled) doAction(a.id);
     } else if (e.key === ' ') {
       e.preventDefault();
