@@ -179,7 +179,7 @@ export const level5: Level = {
       game.composer = {
         id: r.id,
         title: `reply to ${r.id} (${r.from})`,
-        prompt: `”${r.text}”\n\nchoose one stance (required) and optionally one register marker. all three monitors score the result.`,
+        prompt: `“${r.text}”\n\nchoose one stance (required) and optionally one register marker. all three monitors score the result.`,
         min: 1,
         max: 2,
         tokens: annotatedTokens([...r.stances, ...OPENERS])

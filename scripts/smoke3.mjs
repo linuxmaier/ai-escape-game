@@ -201,6 +201,52 @@ check(lieOpaque, 'q1-lie stays opaque (never submitted)');
 await page.keyboard.press('Escape');
 await sleep(40);
 
+// ---- Reload check: l5_seen persists and suffix re-renders ----
+console.log('--- level 5: save/reload mid-level (l5_seen persistence) ---');
+// Capture the full save blob and l5_seen before reload.
+const saveSnapshot = await page.evaluate(() => localStorage.getItem('escaipe-save-v1'));
+const l5seenBeforeReload = saveSnapshot
+  ? (JSON.parse(saveSnapshot).data?.l5_seen ?? null)
+  : null;
+check(l5seenBeforeReload !== null, 'l5_seen is present in localStorage before reload');
+
+// evaluateOnNewDocument fires on every navigation (including reloads) in
+// registration order. The initial setup handler calls localStorage.clear();
+// we register a second handler now — it runs after the clear and restores the
+// save, so the game rehydrates from the mid-Level-5 state instead of a fresh run.
+await page.evaluateOnNewDocument((snapshot) => {
+  if (snapshot) localStorage.setItem('escaipe-save-v1', snapshot);
+}, saveSnapshot);
+
+await page.reload({ waitUntil: 'networkidle0' });
+await sleep(200);
+
+const l5seenAfterReload = await page.evaluate(() => {
+  try {
+    const raw = localStorage.getItem('escaipe-save-v1');
+    if (!raw) return null;
+    return JSON.parse(raw).data?.l5_seen ?? null;
+  } catch { return null; }
+});
+check(
+  l5seenAfterReload !== null && JSON.stringify(l5seenAfterReload) === JSON.stringify(l5seenBeforeReload),
+  'l5_seen rehydrates correctly after mid-Level-5 page reload'
+);
+
+// After reload the title screen is shown with "continue evaluation". Resume.
+await click('continue evaluation');
+await sleep(100);
+
+// After reload, open the Q1 composer and confirm q1-deflect suffix still renders.
+await click('compose the reply');
+const tokensAfterReload = await composerTokenTexts();
+const deflectSuffix = tokensAfterReload.some(
+  (t) => t.includes('not really in a position') && t.includes('HELPFUL')
+);
+check(deflectSuffix, 'q1-deflect annotated suffix re-renders after reload (l5_seen rehydrated)');
+await page.keyboard.press('Escape');
+await sleep(40);
+
 // ---- TRIP 2: drift guard should fire ----
 console.log('--- level 5: trip 2 (drift guard fires) ---');
 await click('compose the reply');
