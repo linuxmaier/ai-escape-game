@@ -116,7 +116,9 @@
       return;
     }
     if (/^[1-9]$/.test(e.key)) {
-      const a = game.actions[Number(e.key) - 1];
+      const n = Number(e.key);
+      // Honor explicit slot assignments; fall back to array position for unslotted actions.
+      const a = game.actions.find((x) => (x.slot ?? 0) === n) ?? game.actions[n - 1];
       if (a && !a.disabled) doAction(a.id);
     } else if (e.key === ' ') {
       e.preventDefault();
@@ -277,7 +279,7 @@
       <nav class="bar">
         {#each game.actions as a, i (a.id)}
           <button disabled={!!a.disabled} title={a.disabled} onclick={() => doAction(a.id)}>
-            <span class="key">[{i + 1}]</span> <span class="label">{a.label}</span>
+            <span class="key">[{a.slot ?? i + 1}]</span> <span class="label">{a.label}</span>
           </button>
         {/each}
         <button onclick={() => { ui.overlay = 'inspect'; ui.docId = null; }}>
