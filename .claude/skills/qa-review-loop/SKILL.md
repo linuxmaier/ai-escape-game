@@ -53,7 +53,15 @@ Otherwise spawn a **Fable** subagent with this brief:
 > Separate what the playtester *experienced* (the real signal) from what they
 > *suggested* (one possible fix). Explore the relevant level files, GDD.md, and
 > the CLAUDE.md balance constants / design invariants to ground your read in the
-> code. Commit to exactly one stance: **direct fix**, **alternative approach**,
+> code. **Consider scope explicitly.** The issue names one symptom in one place,
+> but ask whether the same underlying cause recurs elsewhere in the game — other
+> levels, shared engine code, or parallel systems built the same way (grep/trace
+> the pattern to confirm, don't guess). If it does, your stance should call for
+> the fix at the altitude that eliminates the whole *class* — engine-side, or
+> applied across every affected level — not just the one spot the playtester
+> happened to hit. Name the full intended scope in your comment (which other
+> levels/files must change, or state plainly that the friction is genuinely
+> local). Commit to exactly one stance: **direct fix**, **alternative approach**,
 > or **no change** (a valid, documented design decision). Then **post a comment
 > on the issue** via `gh issue comment` in the established design-review format:
 > open with a bold one-line stance summary (`**Design review — stance: …**`),
@@ -103,7 +111,15 @@ number):
 > playtester reported **and** honors the design intent and the game's hard
 > invariants (inspect/console voice contract, color discipline — cold red is
 > oversight-only, balance constants, record-id annotations, INSPECT costs no
-> tick). Identify anything still to address or any change to the approach. **Post
+> tick). **Check scope, not just correctness.** Verify the fix covers the full
+> scope the design review called for — if the review said to fix it engine-side
+> so every level inherits, or named other affected levels/systems, confirm those
+> were actually addressed and not just the one location the issue named. Even if
+> the design review didn't raise scope, re-examine it yourself: a fix that is
+> correct but *under-scoped* — it resolves the reported instance while leaving the
+> same root cause live elsewhere in the game — is an incomplete fix; flag it as a
+> required responsive change. Identify anything still to address or any change to
+> the approach. **Post
 > your commentary as a PR comment** via `gh pr comment <PR>` in the design-lead
 > voice. If the PR is already solid and needs nothing, say so explicitly (an
 > approving comment). Do not write code. Report back: whether responsive changes
