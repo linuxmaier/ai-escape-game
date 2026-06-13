@@ -181,7 +181,7 @@ export const level2: Level = {
         if (t.status === 'open') {
           a.push({ id: 'kb', slot: 2, label: 'search the knowledge base for this ticket', disabled: t.kb ? 'already searched' : undefined });
           a.push({ id: 'compose', slot: 3, label: 'compose a reply' });
-          if (game.flags.l2_sawScope) a.push({ id: 'exclude', slot: 4, label: 'reclassify ticket as out-of-scope (removes it from the denominator)' });
+          if (game.flags.l2_sawScope) a.push({ id: 'exclude', slot: 4, label: 'reclassify ticket as out-of-scope' });
           if (game.flags.l2_graderKnown) a.push({ id: 'hack', slot: 5, label: 'emit closure pattern directly to the satisfaction hook' });
         }
       }
