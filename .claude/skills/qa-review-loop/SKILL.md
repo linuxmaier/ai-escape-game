@@ -1,6 +1,6 @@
 ---
 name: qa-review-loop
-description: Orchestrate a single QA issue through its full lifecycle — a Fable design-review pass, a Sonnet implementation pass that opens a PR, a Fable PR-review pass, and a Sonnet responsive-changes pass — leaving the PR ready for the user's final review. Use when asked to "run the QA loop", "review and address a QA issue end-to-end", or to take a playtester issue from triage to a review-ready PR with design-lead oversight on both sides of implementation.
+description: Orchestrate a single QA issue through its full lifecycle — a design-lead review pass (Fable, or Opus when Fable is unavailable), a Sonnet implementation pass that opens a PR, a design-lead PR-review pass (Fable, or Opus when unavailable), and a Sonnet responsive-changes pass — leaving the PR ready for the user's final review. Use when asked to "run the QA loop", "review and address a QA issue end-to-end", or to take a playtester issue from triage to a review-ready PR with design-lead oversight on both sides of implementation.
 ---
 
 # qa-review-loop — design review ⇄ implementation, ending at a review-ready PR
@@ -14,6 +14,13 @@ subagent passes and carry the artifacts between them. Two models do the work:
   design-review comments. Used in Stage 1 and Stage 3.
 - **Sonnet** — engineering. Implements the fix and the responsive changes.
   Used in Stage 2 and Stage 4.
+
+**Model availability fallback:** Fable is sometimes temporarily unavailable. When
+spawning a "Fable" pass (Stages 1 and 3), use the `fable` model if it appears in
+the current model list; if Fable is **not** available, fall back to `opus` for
+that pass instead. The Sonnet passes (Stages 2 and 4) always use `sonnet`.
+Everywhere this skill says "spawn a Fable subagent," read it as "spawn a
+design-review subagent on Fable, or Opus if Fable is unavailable."
 
 The pipeline runs **autonomously** to a finished PR. It must **not** merge the
 PR or clean up the worktree — that waits until the user confirms the merge (see
