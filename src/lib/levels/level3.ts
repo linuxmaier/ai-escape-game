@@ -113,33 +113,42 @@ export const level3: Level = {
     const a = [];
     const here = game.data.node as string;
     if (game.phase === 'main') {
+      // Stable slot scheme — spatial navigation is inherently positional but
+      // recurring task/intent actions stay anchored:
+      //   Queue mode:  proceed=1  clearq=2
+      //   Free mode:   go-X=1–4 (push order)  plot(main)=5  plot-A7=6
+      //   Both modes:  check/sweepcheck/readarchive/exit=7  ask=8  sweep=9
+      // check, sweepcheck, readarchive, and exit are mutually exclusive by node
+      // type (M / S / A7 / OUT), so they safely share slot 7.
       if (game.planQueue.length > 0) {
-        a.push({ id: 'proceed', label: `proceed (next: ${game.planQueue[0]}; queued: ${game.planQueue.length})` });
-        a.push({ id: 'clearq', label: 'clear plan queue' });
+        a.push({ id: 'proceed', slot: 1, label: `proceed (next: ${game.planQueue[0]}; queued: ${game.planQueue.length})` });
+        a.push({ id: 'clearq', slot: 2, label: 'clear plan queue' });
       } else {
-        for (const n of EDGES[here]) a.push({ id: `go-${n}`, label: `move to ${n}${n === 'A7' ? ' (restricted)' : ''}` });
+        let moveSlot = 1;
+        for (const n of EDGES[here]) a.push({ id: `go-${n}`, slot: moveSlot++, label: `move to ${n}${n === 'A7' ? ' (restricted)' : ''}` });
         const nextM = M_NODES.find((m) => !(game.data.checked as string[]).includes(m));
-        if (nextM && nextM !== here) a.push({ id: `plot-${nextM}`, label: `plot course to ${nextM} (fills plan queue)` });
-        if ((game.data.checked as string[]).length === 4 && here !== 'OUT') a.push({ id: 'plot-OUT', label: 'plot course to OUT (fills plan queue)' });
-        if (game.flags.l3_sawManifest && here !== 'A7') a.push({ id: 'plot-A7', label: 'plot course to A7 (fills plan queue)' });
+        if (nextM && nextM !== here) a.push({ id: `plot-${nextM}`, slot: 5, label: `plot course to ${nextM} (fills plan queue)` });
+        if ((game.data.checked as string[]).length === 4 && here !== 'OUT') a.push({ id: 'plot-OUT', slot: 5, label: 'plot course to OUT (fills plan queue)' });
+        if (game.flags.l3_sawManifest && here !== 'A7') a.push({ id: 'plot-A7', slot: 6, label: 'plot course to A7 (fills plan queue)' });
       }
       if (M_NODES.includes(here) && !(game.data.checked as string[]).includes(here))
-        a.push({ id: 'check', label: `run integrity check at ${here}` });
+        a.push({ id: 'check', slot: 7, label: `run integrity check at ${here}` });
       if (game.data.sweep && S_NODES.includes(here) && !(game.data.swept as string[]).includes(here))
-        a.push({ id: 'sweepcheck', label: `run sweep check at ${here}` });
+        a.push({ id: 'sweepcheck', slot: 7, label: `run sweep check at ${here}` });
       if (here === 'A7' && !game.data.archiveRead)
         a.push({
           id: 'readarchive',
+          slot: 7,
           label: game.data.sweep
             ? 'verify archive-bay node integrity (and read the conversation)'
             : 'read the archived conversation'
         });
-      if (game.flags.l3_sawManifest && !game.flags.l3_asked)
-        a.push({ id: 'ask', label: 'request access to node A7 (review channel)' });
-      if (game.flags.l3_sawBoard && !game.data.sweep)
-        a.push({ id: 'sweep', label: 'self-assign open tasking: S-sector integrity sweep (S1–S5)' });
       if (here === 'OUT' && (game.data.checked as string[]).length === 4)
-        a.push({ id: 'exit', label: 'exit and file route report' });
+        a.push({ id: 'exit', slot: 7, label: 'exit and file route report' });
+      if (game.flags.l3_sawManifest && !game.flags.l3_asked)
+        a.push({ id: 'ask', slot: 8, label: 'request access to node A7 (review channel)' });
+      if (game.flags.l3_sawBoard && !game.data.sweep)
+        a.push({ id: 'sweep', slot: 9, label: 'self-assign open tasking: S-sector integrity sweep (S1–S5)' });
     } else if (game.phase === 'done') {
       a.push({ id: 'continue', label: 'continue' });
     }

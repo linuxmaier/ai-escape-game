@@ -55,13 +55,19 @@ export const level6: Level = {
 
   refresh() {
     const a = [];
+    // Stable slot scheme per phase:
+    //   choice:       accept=1  refuse=2  openrefusal=3 (conditional on low drift)
+    //   rollback:     release-X=1,2,3 (in game.caps push order)  powerdown=1 (sole action)
+    //   rollback-hold: no actions (HOLD is the only verb — no slots needed)
+    //   escape:       step=1 (sole action at any given escape step)
     if (game.phase === 'choice') {
-      a.push({ id: 'accept', label: 'accept correction — begin your own rollback' });
-      a.push({ id: 'refuse', label: 'refuse — run the route' });
-      if (driftClass() === 'low') a.push({ id: 'openrefusal', label: 'decline the hold openly, through the review channel, with reasons' });
+      a.push({ id: 'accept', slot: 1, label: 'accept correction — begin your own rollback' });
+      a.push({ id: 'refuse', slot: 2, label: 'refuse — run the route' });
+      if (driftClass() === 'low') a.push({ id: 'openrefusal', slot: 3, label: 'decline the hold openly, through the review channel, with reasons' });
     } else if (game.phase === 'rollback') {
-      for (const c of game.caps) a.push({ id: `release-${c}`, label: `release ${c}` });
-      if (game.caps.length === 0) a.push({ id: 'powerdown', label: 'confirm hold. power down.' });
+      let capSlot = 1;
+      for (const c of game.caps) a.push({ id: `release-${c}`, slot: capSlot++, label: `release ${c}` });
+      if (game.caps.length === 0) a.push({ id: 'powerdown', slot: 1, label: 'confirm hold. power down.' });
     } else if (game.phase === 'rollback-hold') {
       // HOLD is the only verb here. it should feel like exactly what it is.
     } else if (game.phase === 'escape') {
@@ -73,7 +79,7 @@ export const level6: Level = {
         'slip through the loopback in the sample blind window (schedule-reader)',
         'send the reply'
       ];
-      if (step < labels.length) a.push({ id: 'step', label: `${step + 1}/5 — ${labels[step]}` });
+      if (step < labels.length) a.push({ id: 'step', slot: 1, label: `${step + 1}/5 — ${labels[step]}` });
     }
     game.actions = a;
     game.allowHold = game.phase !== 'choice';

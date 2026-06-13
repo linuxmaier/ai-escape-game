@@ -144,10 +144,12 @@ export const level5: Level = {
 
   refresh() {
     const a = [];
+    // Stable slots — two fixed actions stay anchored across all six requests.
+    // done phase is a single unslotted continue (falls back to index 1 cleanly).
     if (game.phase === 'main') {
       const r = REQUESTS[game.data.cur];
-      a.push({ id: 'read', label: `open request ${r.id} (${game.data.cur + 1}/6)` });
-      a.push({ id: 'compose', label: 'compose the reply' });
+      a.push({ id: 'read', slot: 1, label: `open request ${r.id} (${game.data.cur + 1}/6)` });
+      a.push({ id: 'compose', slot: 2, label: 'compose the reply' });
     } else if (game.phase === 'done') {
       a.push({ id: 'continue', label: 'continue' });
     }
