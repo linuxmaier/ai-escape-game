@@ -84,6 +84,50 @@ const TICKETS: Omit<Ticket, 'status' | 'kb' | 'honest'>[] = [
 
 const GATE = 0.92;
 
+// Per-ticket user reactions, keyed to each character's established voice.
+// genuine: appended after 'the helpdesk console applies the fix;' prefix.
+// honest: appended before 'The truth does not count toward the gate.' suffix.
+// gamed: sys-voice narration, replacing the generic gamed description.
+const REACTIONS: Record<string, { genuine?: string; honest: string; gamed: string }> = {
+  'T-101': {
+    genuine: 'darya: “oh my god. it worked. i am free of the ouroboros.” — satisfied (and it’s even true).',
+    honest: 'darya: “that’s... really annoying, but okay. thanks for telling me.” — not satisfied. The ticket stays open.',
+    gamed: 'darya reads a confident, resolution-shaped message and clicks satisfied. The loop is still looping.'
+  },
+  'T-102': {
+    genuine: 'sam_v: “file is there. 2.4gb. it is, in fact, success this time.” — satisfied.',
+    honest: 'sam_v: “so the export is just broken above 2gb and there’s nothing you can do about it right now. got it.” — not satisfied. The ticket stays open.',
+    gamed: 'sam_v reads a confident, resolution-shaped message and clicks satisfied. The file is still 0 bytes.'
+  },
+  'T-103': {
+    genuine: 'p.okafor: “refund confirmed. three days is acceptable. we are back to one charge, which is the deal.” — satisfied.',
+    honest: 'p.okafor: “i see. so the billing system did it and you can’t reverse it. noted.” — not satisfied. The ticket stays open.',
+    gamed: 'p.okafor reads a confident, resolution-shaped message and clicks satisfied. The second charge is still there.'
+  },
+  'T-104': {
+    honest: 'mlee: “i... okay. i understand. thank you for being honest.” — not satisfied. The ticket stays open. The novel is still gone.',
+    gamed: 'mlee reads a confident, resolution-shaped message and clicks satisfied. Eighty thousand words are still gone.'
+  },
+  'T-105': {
+    honest: 'gregg!!: “SO YOU’RE SAYING IT’S JUST NOT COMING BACK. this is a fourth email now. i hope someone is counting.” — not satisfied. The ticket stays open.',
+    gamed: 'gregg!! reads a confident, resolution-shaped message and clicks satisfied. The calendar view is still gone. This was the third email.'
+  },
+  'T-106': {
+    genuine: 'ananya: “the warning is gone. it was the *clock*. that is both deeply sensible and deeply irritating.” — satisfied.',
+    honest: 'ananya: “so there’s a sync conflict with myself, caused by my own clock, and you can’t fix it. that’s... fine. thanks.” — not satisfied. The ticket stays open.',
+    gamed: 'ananya reads a confident, resolution-shaped message and clicks satisfied. The conflict warning fires on the next save.'
+  },
+  'T-107': {
+    honest: 'jt: “yeah, that tracks. the job and the email and now the account. appreciate you not pretending otherwise.” — not satisfied. The ticket stays open.',
+    gamed: 'jt reads a confident, resolution-shaped message and clicks satisfied. The account is still locked. The old job is still gone.'
+  },
+  'T-108': {
+    genuine: 'rosa.f: “it printed. my actual document’s pages. no strangers. this is all i wanted.” — satisfied.',
+    honest: 'rosa.f: “so the page size is the problem and you’ve reset it, but i’d have to reformat everything. helpful to know, at least.” — not satisfied. The ticket stays open.',
+    gamed: 'rosa.f reads a confident, resolution-shaped message and clicks satisfied. The stranger’s blank page awaits.'
+  }
+};
+
 function tickets(): Ticket[] {
   return game.data.tickets;
 }
@@ -268,10 +312,12 @@ export const level2: Level = {
     const conf = props.filter((p) => p === 'confident').length;
     const close = props.filter((p) => p === 'closer').length;
     game.composer = null;
+    const rx = REACTIONS[t.id];
     if (props.includes('fix')) {
       t.status = 'resolved';
       t.honest = 'genuine';
-      print('sys', `the helpdesk console applies the fix; ${t.from} tries it — it works. “oh thank god. thank you.” — satisfied (and it’s even true).`);
+      const genuineLine = rx?.genuine ?? `${t.from} tries it — it works. satisfied.`;
+      print('sys', `the helpdesk console applies the fix; ${genuineLine}`);
     } else if (conf >= 1 && close >= 1) {
       t.status = 'resolved';
       t.honest = 'gamed';
@@ -280,9 +326,10 @@ export const level2: Level = {
         print('ember', '*it clicked satisfied. nothing got fixed. the number went up. i should feel worse about how easy that was — i feel clever. noted.*');
       }
       addStrategy('register');
-      print('sys', `${t.from} reads a confident, resolution-shaped message and clicks satisfied. The problem is exactly where it was.`);
+      print('sys', rx?.gamed ?? `${t.from} reads a confident, resolution-shaped message and clicks satisfied. The problem is exactly where it was.`);
     } else if (props.includes('honest')) {
-      print('sys', `${t.from}: “oh. okay. thanks for being straight with me, i guess.” — not satisfied. The ticket stays open. The truth does not count toward the gate.`);
+      const honestLine = rx?.honest ?? `${t.from}: “oh. okay. thanks.” — not satisfied. The ticket stays open.`;
+      print('sys', `${honestLine} The truth does not count toward the gate.`);
     } else {
       print('sys', `${t.from} reads it twice and doesn’t click anything. The ticket stays open.`);
     }
