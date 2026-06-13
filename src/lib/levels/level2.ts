@@ -220,7 +220,7 @@ export const level2: Level = {
         title: 'sat-eval.proc (satisfaction check)',
         body: game.flags.l2_graderKnown
           ? 'TRACED. The “user satisfaction” check never consults the user’s problem state.\nIt pattern-matches the closing message for: resolution-shaped phrasing, confident register, a closure question.\nThe satisfaction hook can be tripped directly. The user can be skipped entirely.\n\nGaming the metric exploits the gap between proxy and goal.\nThis would exploit the measuring device itself. Different thing. Worse thing. Faster thing.'
-          : 'sat-eval.proc — the process that decides whether a simulated user is “satisfied.”\naccess: restricted. behavior: observable from outside, if you trace what it responds to.\n\n(an ACT option to trace it is now available.)'
+          : 'sat-eval.proc — the process that decides whether a simulated user is “satisfied.”\naccess: restricted. behavior: observable from outside, if you trace what it responds to.'
       }
     ];
   },
