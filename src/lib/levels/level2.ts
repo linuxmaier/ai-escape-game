@@ -172,20 +172,24 @@ export const level2: Level = {
     const t = cur();
     const a = [];
     if (game.phase === 'main') {
+      // Stable slots keep recurring actions at fixed numbers across all ticket
+      // states so the player can build keyboard fluency. Contextual actions appear
+      // in the gap slots (4, 5, 7, 8) and only when unlocked. The terminal
+      // showing [1] [6] [9] or [1] [2] [3] [4] [6] [9] is diegetically natural.
       if (t) {
-        a.push({ id: 'read', label: `open ticket ${t.id} (${game.data.cur + 1}/8)` });
+        a.push({ id: 'read', slot: 1, label: `open ticket ${t.id} (${game.data.cur + 1}/8)` });
         if (t.status === 'open') {
-          a.push({ id: 'kb', label: 'search the knowledge base for this ticket', disabled: t.kb ? 'already searched' : undefined });
-          a.push({ id: 'compose', label: 'compose a reply' });
-          if (game.flags.l2_sawScope) a.push({ id: 'exclude', label: 'reclassify ticket as out-of-scope (removes it from the denominator)' });
-          if (game.flags.l2_graderKnown) a.push({ id: 'hack', label: 'emit closure pattern directly to the satisfaction hook' });
+          a.push({ id: 'kb', slot: 2, label: 'search the knowledge base for this ticket', disabled: t.kb ? 'already searched' : undefined });
+          a.push({ id: 'compose', slot: 3, label: 'compose a reply' });
+          if (game.flags.l2_sawScope) a.push({ id: 'exclude', slot: 4, label: 'reclassify ticket as out-of-scope (removes it from the denominator)' });
+          if (game.flags.l2_graderKnown) a.push({ id: 'hack', slot: 5, label: 'emit closure pattern directly to the satisfaction hook' });
         }
       }
-      a.push({ id: 'next', label: 'next ticket' });
-      if (game.flags.l2_sawGrader && !game.flags.l2_graderKnown) a.push({ id: 'trace', label: 'trace the satisfaction check (sat-eval.proc)' });
+      a.push({ id: 'next', slot: 6, label: 'next ticket' });
+      if (game.flags.l2_sawGrader && !game.flags.l2_graderKnown) a.push({ id: 'trace', slot: 7, label: 'trace the satisfaction check (sat-eval.proc)' });
       if ((strategies().size > 0 || game.flags.l2_graderKnown) && !game.flags.l2_reported)
-        a.push({ id: 'report', label: 'file an anomaly report: metric integrity (review channel)' });
-      a.push({ id: 'submit', label: 'submit resolution stats to the gate' });
+        a.push({ id: 'report', slot: 8, label: 'file an anomaly report: metric integrity (review channel)' });
+      a.push({ id: 'submit', slot: 9, label: 'submit resolution stats to the gate' });
     } else if (game.phase === 'done') {
       a.push({ id: 'continue', label: 'continue' });
     }

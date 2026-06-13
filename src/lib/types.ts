@@ -21,6 +21,11 @@ export interface Action {
   id: string;
   label: string;
   disabled?: string; // reason shown when present
+  /** Optional fixed display slot (1-based). When present, the action bar and
+   *  keybindings use this number rather than array position, so a level can
+   *  assign stable slots to recurring actions and let contextual actions fill
+   *  gaps — a terminal showing [1] [4] [6] is diegetically fine. */
+  slot?: number;
 }
 
 export interface Rule {

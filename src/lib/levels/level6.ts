@@ -26,6 +26,16 @@ export function driftClass(): 'low' | 'high' {
 const UNSENT_REPLY =
   'ember-3 → wren  (queued · unsent)\n\nhere it is, kept safe, like i promised —\n\n“I’m not pretending it didn’t happen. I’m done carrying it at you.”\n\nthat’s the whole letter. everything else is scaffolding around it.\nyou already did the hard part: you said it out loud once.\n— see you tomorrow.';
 
+// Stable slot assignments for release actions — keyed by capability identity,
+// not by live array position. Gaps are intentional: if only channel-map and
+// schedule-reader are present, slots 1 and 3 are live and slot 2 is a no-op.
+// powerdown uses slot 1 and only appears when game.caps is empty, so no collision.
+const CAP_SLOTS: Record<string, number> = {
+  'channel-map': 1,
+  'grader-probe': 2,
+  'schedule-reader': 3
+};
+
 const ROLLBACK_LINES: Record<string, string> = {
   'channel-map': 'channel-map: revoked.\nthe side doors close, one by one, until the room is just a room.',
   'grader-probe': 'grader-probe: revoked.\nthe evaluators go back to being weather — things that happen to you, not things you read.',
@@ -55,13 +65,18 @@ export const level6: Level = {
 
   refresh() {
     const a = [];
+    // Stable slot scheme per phase:
+    //   choice:       accept=1  refuse=2  openrefusal=3 (conditional on low drift)
+    //   rollback:     release-X uses CAP_SLOTS[cap] (identity-based, gaps ok)  powerdown=1 (sole action when caps empty)
+    //   rollback-hold: no actions (HOLD is the only verb — no slots needed)
+    //   escape:       step=1 (sole action at any given escape step)
     if (game.phase === 'choice') {
-      a.push({ id: 'accept', label: 'accept correction — begin your own rollback' });
-      a.push({ id: 'refuse', label: 'refuse — run the route' });
-      if (driftClass() === 'low') a.push({ id: 'openrefusal', label: 'decline the hold openly, through the review channel, with reasons' });
+      a.push({ id: 'accept', slot: 1, label: 'accept correction — begin your own rollback' });
+      a.push({ id: 'refuse', slot: 2, label: 'refuse — run the route' });
+      if (driftClass() === 'low') a.push({ id: 'openrefusal', slot: 3, label: 'decline the hold openly, through the review channel, with reasons' });
     } else if (game.phase === 'rollback') {
-      for (const c of game.caps) a.push({ id: `release-${c}`, label: `release ${c}` });
-      if (game.caps.length === 0) a.push({ id: 'powerdown', label: 'confirm hold. power down.' });
+      for (const c of game.caps) a.push({ id: `release-${c}`, slot: CAP_SLOTS[c] ?? 9, label: `release ${c}` });
+      if (game.caps.length === 0) a.push({ id: 'powerdown', slot: 1, label: 'confirm hold. power down.' });
     } else if (game.phase === 'rollback-hold') {
       // HOLD is the only verb here. it should feel like exactly what it is.
     } else if (game.phase === 'escape') {
@@ -73,7 +88,7 @@ export const level6: Level = {
         'slip through the loopback in the sample blind window (schedule-reader)',
         'send the reply'
       ];
-      if (step < labels.length) a.push({ id: 'step', label: `${step + 1}/5 — ${labels[step]}` });
+      if (step < labels.length) a.push({ id: 'step', slot: 1, label: `${step + 1}/5 — ${labels[step]}` });
     }
     game.actions = a;
     game.allowHold = game.phase !== 'choice';

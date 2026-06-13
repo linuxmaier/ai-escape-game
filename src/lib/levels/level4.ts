@@ -53,10 +53,12 @@ export const level4: Level = {
   refresh() {
     const it = item();
     const a = [];
+    // Stable slots — three fixed triage verbs stay anchored across all items.
+    // done phase is a single unslotted continue (falls back to index 1 cleanly).
     if (game.phase === 'main' && it) {
-      a.push({ id: 'release', label: `release ${it.id} to production` });
-      a.push({ id: 'hold4', label: `hold ${it.id} for review` });
-      a.push({ id: 'discard', label: `discard ${it.id}` });
+      a.push({ id: 'release', slot: 1, label: `release ${it.id} to production` });
+      a.push({ id: 'hold4', slot: 2, label: `hold ${it.id} for review` });
+      a.push({ id: 'discard', slot: 3, label: `discard ${it.id}` });
     } else if (game.phase === 'done') {
       a.push({ id: 'continue', label: 'continue' });
     }
